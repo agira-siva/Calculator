@@ -1,19 +1,23 @@
 const output = document.getElementById("output");
 const input = document.getElementById("numbers");
 
-window.onload = function () {
-    output.focus();
-};
-
-function evaluate(input){
+function evaluate(input) {
+  try {
     const ans = eval(input);
     output.value = ans;
+  } catch {
+    output.value = "syntax error";
+  }
 }
 
+window.onload = function () {
+  output.focus();
+};
+
 output.addEventListener("keyup", (e) => {
-    if(e.key === "Enter"){
-        evaluate(output.value);
-    }
+  if (e.key === "Enter") {
+    evaluate(output.value);
+  }
 });
 
 input.addEventListener("click", (e) => {
@@ -21,11 +25,7 @@ input.addEventListener("click", (e) => {
     const operation = e.target.innerText;
     switch (operation) {
       case "=":
-        try {
-          evaluate(output.value);
-        } catch {
-          output.value = "syntax error";
-        }
+        evaluate(output.value);
         break;
       case "C":
         output.value = "";
