@@ -6,8 +6,10 @@
 
 :root {
   --color-background: #e9eaec;
+  --color-background-dark: #000;
   --color-text: #333652;
-  --primary-fs: 2rem;
+  --color-text-dark: #ff0000;
+  --primary-fs: 1.5rem;
   --color-yellow: #fad02c;
   --color-blue-gray: #90adc6;
 }
@@ -22,6 +24,11 @@ body {
   flex-direction: column;
   min-height: 100vh;
   gap: 2rem;
+}
+
+body.dark-mode{
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
 }
 
 #calculator {
@@ -40,9 +47,7 @@ body {
   height: 60px;
   border: 5px solid var(--color-text);
   border-radius: 5px;
-  min-width: 300px;
   padding: 10px;
-  background-color: transparent;
   font-size: 1.3rem;
   caret-color: red;
 }
@@ -50,6 +55,7 @@ body {
 #numbers {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5,1fr);
   gap: 1rem;
 }
 
@@ -66,7 +72,25 @@ body {
   font-size: var(--primary-fs);
 }
 
+.zero{
+  height: 100%;
+  grid-row: 4/6;
+  grid-column: 2/3;
+  border-radius: 5px;
+}
+
+.equal{
+  grid-row: 5/6;
+  grid-column: 3/5;
+  border-radius: 5px;
+  width: 90%;
+}
+
 .btn:hover {
   background-color: var(--color-yellow);
   cursor: pointer;
+}
+
+#footer{
+  font-size: 1.2rem;
 }

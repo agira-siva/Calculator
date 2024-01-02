@@ -1,28 +1,41 @@
 const output = document.getElementById("output");
 const input = document.getElementById("numbers");
 
+let dark;
+
 function evaluate(input) {
   const ans = evaluateAnswer(input);
   if(ans == undefined){output.value = ""}
   else if(isNaN(ans)){output.value="syntax error"}
-  else{output.value = ans};
+  else{
+    output.value = ans;
+    sessionStorage.setItem(input,ans);
+  }
 }
 
 window.onload = function () {
   output.focus();
+  dark = localStorage.getItem("dark-mode");
+  if(dark === "true"){
+    document.body.classList.add("dark-mode");
+  }
+  else{
+    document.body.classList.remove("dark-mode");
+  }
 };
 
 output.addEventListener("keyup", (e) => {
   if (e.key === "Enter") {
     evaluate(output.value);
   }else if(isOperator(e.key)){
+    output.value = output.value.substring(0, output.value.length-1);
     output.value = validate(e.key, output.value, output.value.length);
   }
-
 });
 
+
 output.addEventListener("input", () => {
-  restrictInput();
+  output.value = output.value.replace(/[^0-9+\-*/]/, '');
 })
 
 function isOperator(operator){
@@ -35,9 +48,6 @@ function isOperator(operator){
   return false;
 }
 
-function restrictInput() {
-  output.value = output.value.replace(/[^0-9+\-*/.]/g, '');
-}
 
 function validate(operator, value, valueLength){
     if((operator == "+" || operator == "*"  || operator == "/") && value == ""){
@@ -69,8 +79,13 @@ input.addEventListener("click", (e) => {
         case "C":
           output.value = "";
           break;
-        case "x":
+        case "D":
           output.value = output.value.substring(0,(output.value.length)-1);
+          break;
+        case "":
+          document.body.classList.toggle("dark-mode");
+          if(dark === "true"){dark = "false"}else{dark="true"};
+          localStorage.setItem("dark-mode",dark);
           break;
         default:
           output.value += e.target.innerHTML;
@@ -86,17 +101,7 @@ function evaluateAnswer(input){
   return evaluateValue(evaluatePostFix(input), evaluatePostFix(input).length);
 }
 
-
-function evaluatePostFix(str) {
-  const precedence = {
-    "*": 2,
-    "/": 2,
-
-    "+": 1,
-
-    "-": 1,
-  };
-
+function generateOperandsArray(str){
   let operandsArray = [];
   let number = "";
   let i =0;
@@ -117,6 +122,21 @@ function evaluatePostFix(str) {
   }
 
   operandsArray.push(number);
+  return operandsArray;
+}
+
+
+function evaluatePostFix(str) {
+  const precedence = {
+    "*": 2,
+    "/": 2,
+
+    "+": 1,
+
+    "-": 1,
+  };
+
+  let operandsArray = generateOperandsArray(str);
   let len = operandsArray.length;
   let postfixArray = [];
   let arrStack = [];
