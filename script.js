@@ -5,8 +5,12 @@ let dark;
 
 function evaluate(input) {
   const ans = evaluateAnswer(input);
-  if(ans == undefined){output.value = ""}
-  else if(isNaN(ans)){output.value="syntax error"}
+  if(ans == undefined){
+    output.value = "";
+  }
+  else if(isNaN(ans)){
+    output.value="syntax error"
+  }
   else{
     output.value = ans;
     sessionStorage.setItem(input,ans);
@@ -24,7 +28,7 @@ window.onload = function () {
   }
 };
 
-output.addEventListener("keyup", (e) => {
+output.addEventListener("keyup", e => {
   if (e.key === "Enter") {
     evaluate(output.value);
   }else if(isOperator(e.key)){
@@ -112,7 +116,7 @@ function generateOperandsArray(str){
   
   for(i; i<str.length; i++){
 
-      if(/[0-9]/.test(str[i]) || str[i]== "-" && (str[i-1] == "*" || str[i-1] == "/")){
+      if(/[0-9.]/.test(str[i]) || str[i]== "-" && (str[i-1] == "*" || str[i-1] == "/")){
         number+= str[i];
       }else{
         operandsArray.push(number);
@@ -141,7 +145,7 @@ function evaluatePostFix(str) {
   let postfixArray = [];
   let arrStack = [];
   
-  for (let i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) { // use map or foreach...
     let stackLength = arrStack.length;
     if (/[0-9]/.test(Number(operandsArray[i]))) {
       postfixArray.push(operandsArray[i]);
